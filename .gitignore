@@ -1,0 +1,13 @@
+# Python files
+*.egg-info
+__pycache__
+*.py[co]
+
+# Environment
+/app/app/environment.py
+*.sqlite3
+/venv
+.idea
+
+# MacOS
+.DS_Store
