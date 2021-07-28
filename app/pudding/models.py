@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.hashers import make_password
 
 from django.utils import timezone
@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#specifying-a-custom-user-model
     """
