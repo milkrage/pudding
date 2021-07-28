@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.views import View
+from django.views.generic import View, CreateView
+from . import forms
 
 
 class TestView(View):
@@ -8,3 +9,7 @@ class TestView(View):
         return render(request, 'pudding/test_page.html', context={'username': username})
 
 
+class RegistrationView(CreateView):
+    template_name = 'auth/registration.html'
+    form_class = forms.RegistrationForm
+    success_url = '/'
