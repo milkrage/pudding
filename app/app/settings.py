@@ -102,10 +102,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Custom User Model
-# https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#substituting-a-custom-user-model
-
+# Custom User Model: https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#substituting-a-custom-user-model
 AUTH_USER_MODEL = 'pudding.User'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Internationalization
