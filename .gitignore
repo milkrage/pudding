@@ -5,6 +5,7 @@ __pycache__
 
 # Environment
 /app/app/environment.py
+/app/pudding/migrations/*_initial.py
 *.sqlite3
 /venv
 .idea
