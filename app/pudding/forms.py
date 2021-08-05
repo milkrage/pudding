@@ -1,6 +1,8 @@
 from django import forms
 from django.core import validators
 from django.contrib.auth import password_validation, get_user_model, authenticate
+
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from . import models
@@ -71,8 +73,8 @@ class LoginForm(forms.ModelForm):
         labels = {'email': _('Email address')}
         widgets = {'email': forms.EmailInput(attrs={'autofocus': True})}
 
-    def __init__(self, request=None, *args, **kwargs):
-        self.request = request
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('request')
         self.user = None
         super().__init__(*args, **kwargs)
 
@@ -93,3 +95,53 @@ class LoginForm(forms.ModelForm):
                 raise forms.ValidationError(_('This account is inactive.'), code='inactive')
 
         return self.cleaned_data
+
+
+class AbstractCardForm(forms.ModelForm):
+    host = forms.CharField(
+        label=_('Host'),
+        max_length=254,
+        widget=forms.HiddenInput()
+    )
+    username = forms.CharField(
+        label=_('Username'),
+        max_length=254,
+        widget=forms.TextInput(attrs={'autocomplete': 'off'})
+    )
+    password = forms.CharField(
+        label=_('Password'),
+        max_length=254,
+        widget=forms.TextInput(attrs={'autocomplete': 'new-password', 'type': 'password'})
+    )
+    notes = forms.CharField(
+        label=_('Notes'),
+        max_length=500,
+        widget=forms.Textarea(),
+        required=False
+    )
+    is_favorite = forms.BooleanField(
+        label=_('Favorite'),
+        widget=forms.CheckboxInput(),
+        required=False
+    )
+
+    class Meta:
+        model = models.AbstractCard
+        fields = ('host', 'username', 'password', 'notes', 'is_favorite')
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get('request')
+        super().__init__(*args, **kwargs)
+
+    def _post_clean(self):
+        self.instance.owner = get_user_model().objects.get(pk=self.request.user.id)
+        self.instance.date_modified = timezone.now()
+        super()._post_clean()
+
+
+class SiteCardForm(AbstractCardForm):
+    uri = forms.URLField(label=_('URI'), max_length=254, widget=forms.URLInput())
+
+    class Meta:
+        model = models.SiteCard
+        fields = ('host', 'uri', 'username', 'password', 'notes', 'is_favorite')
