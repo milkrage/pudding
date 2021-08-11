@@ -1,4 +1,4 @@
-from hashlib import md5
+import uuid
 from django.db import models
 
 from django.contrib.auth.base_user import BaseUserManager
@@ -64,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class AbstractCard(models.Model):
+class Card(models.Model):
 
     # Длинна поля 1368 символов рассчитывалась следующим образом:
     # исходные данные: максимальная длинна пользовательских данных = 254 символа в utf-8, хранение в base64
@@ -73,34 +73,44 @@ class AbstractCard(models.Model):
     # 3. переводим в base64 (каждые 3 исходных байта кодируются 4 символами): 1024 / 3 * 4 = 1366 символа
     # 4. base64 строка должна быть кратна 4: 1366 / 4 = 341.5 -> 342 * 4 = 1368 символов
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    host = models.CharField(_('Host'), max_length=1368)
-    username = models.CharField(_('Username'), max_length=1368)
-    password = models.CharField(_('Password'), max_length=1368)
-    notes = models.CharField(_('Notes'), max_length=2668, blank=True)
-    date_created = models.DateTimeField(_('Date of creation'), default=timezone.now)
-    date_modified = models.DateTimeField(_('Date of last modification'), default=timezone.now)
-    date_opened = models.DateTimeField(_('Date of last activity'), default=timezone.now)
-    is_favorite = models.BooleanField(_('Favorite'), blank=True, default=False)
-    hash = models.CharField(_('Search hash'), max_length=32, unique=True)
+    username = models.CharField(_('username'), max_length=1368)
+    password = models.CharField(_('password'), max_length=1368)
+    notes = models.CharField(_('notes'), max_length=2668, blank=True)
+    is_favorite = models.BooleanField(_('favorite'), blank=True, default=False)
+    is_deleted = models.BooleanField(_('deleted'), default=False)
 
-    class Meta:
-        abstract = True
+    @classmethod
+    def mark_as_deleted(cls, owner, id):
+        query = cls.objects.filter(owner=owner, id=id, is_deleted=False)
 
-    def __str__(self):
-        return 'id:{} | owner:{} | hash:{}'.format(self.pk, self.owner, self.hash)
+        if query.count() == 0:
+            return False
 
-    def clean(self):
-        self.hash = self.get_hash()
-
-    def get_hash(self):
-        soup = '{0}{1}{2}'.format(self.owner, self.host, self.username)
-        return md5(bytes(soup, 'utf-8')).hexdigest()
+        query.update(is_deleted=True)
+        return True
 
 
-class SiteCard(AbstractCard):
-    uri = models.URLField(_('URI'), max_length=1368)
+class AuditCard(models.Model):
+    ACTIONS_LIST = [
+        ('c', 'created'),
+        ('m', 'modified'),
+        ('d', 'deleted'),
+    ]
 
-    def get_hash(self):
-        soup = '{0}{1}{2}'.format(self.owner, self.uri, self.username)
-        return md5(bytes(soup, 'utf-8')).hexdigest()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    action = models.CharField(max_length=1, choices=ACTIONS_LIST)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now)
+
+
+class SiteCard(models.Model):
+    card = models.OneToOneField(Card, on_delete=models.CASCADE)
+    uri = models.CharField(_('uri'), max_length=1368)
+    host = models.CharField(_('host'), max_length=1368)
+
+    @classmethod
+    def check_unique(cls, owner, username, uri):
+        query = cls.objects.filter(card__owner=owner, card__username=username, uri=uri, card__is_deleted=False)
+        return False if query.exists() else True

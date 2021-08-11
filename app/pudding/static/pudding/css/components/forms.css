@@ -1,0 +1,178 @@
+form {
+    width: var(--form-width);
+}
+
+    form h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0;
+        padding-bottom: var(--padding);
+    }
+
+/* form element */
+form .field {
+    margin-bottom: 15px;
+}
+
+    form .field:last-child {
+        padding-top: 15px;
+    }
+
+    form .field label {
+        margin-bottom: 5px;
+        user-select: none;
+    }
+
+    form .field .help-text {
+        margin-top: 5px;
+    }
+
+    /* help class */
+    form .field .no-select {
+        user-select: none;
+    }
+
+    form .field .full-width {
+        width: 100% !important;
+    }
+
+    /* group */
+    form .field .group-field {
+        display: flex;
+    }
+
+        /* input | icon */
+        form .field .group-field .input-left {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        /* icon | input */
+        form .field .group-field .input-right {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        form .field .group-field .input-icon {
+            display: flex;
+            align-items: center;
+            border: 1px solid #858585;
+            border-radius: .25em;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: .875em;
+            background: var(--bg-dark);
+        }
+
+            /* icon | input */
+            form .field .group-field .icon-left {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-right: 0;
+            }
+
+            /* input | icon */
+            form .field .group-field .icon-right {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-left: 0;
+            }
+
+            form .field .group-field .icon-animate:active {
+                background-color: rgba(45, 164, 78, 0.3);
+            }
+
+                form .field .group-field .input-icon img {
+                    width: 18px;
+                    height: 18px;
+                }
+
+        form .field .group-field .separate:first-child {
+            margin-right: 7.5px;
+        }
+
+        form .field .group-field .separate:last-child {
+            margin-left: 7.5px;
+        }
+
+
+/* inputs */
+form .field input,
+form .field textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--btn-border-color);;
+    border-radius: .25em;
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+
+    form .field input[type='checkbox'] {
+        float: left;
+        width: 1em;
+        height: 1em;
+        margin-top: .25em;
+        margin-right: 15px;
+    }
+
+    form .field input[type='submit'],
+    form .field input[type='button'] {
+        display: inline-block;
+        width: auto;
+        padding: 6px 12px;
+        border-radius: .25em;
+        background-color: var(--btn-bg);
+        font-weight: 500;
+    }
+
+        form .field input[type='submit']:hover,
+        form .field input[type='button']:hover {
+            background-color: var(--btn-bg-select);
+        }
+
+        form .field input[type='submit'] {
+            border-color: var(--btn-primary);
+            background-color: var(--btn-primary);
+            color: #fff;
+        }
+
+            form .field input[type='submit']:hover {
+                background-color: var(--btn-primary-select);
+            }
+
+        form .field input.btn-danger {
+            color: var(--btn-danger);
+            border-color: var(--btn-border-color);
+            background-color: var(--btn-bg);
+        }
+
+            form .field input.btn-danger:hover {
+                color: #fff;
+                border-color: var(--btn-danger-select);
+                background-color: var(--btn-danger-select);
+            }
+
+
+/* errors */
+form ul.errorlist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+form > ul.errorlist {
+    padding-bottom: var(--padding);
+}
+
+    form > ul.errorlist li {
+        margin-bottom: 15px;
+    }
+
+        form > ul.errorlist li:last-child {
+            margin-bottom: 0;
+        }
+
+form .field > ul.errorlist {
+    margin-top: 5px;
+    font-size: .875em;
+    color: var(--error);
+}

@@ -27,7 +27,7 @@ SECRET_KEY = environment.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environment.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = environment.ALLOWED_HOSTS
 
 
 # Application definition

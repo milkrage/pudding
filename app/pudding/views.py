@@ -12,11 +12,17 @@ from . import forms
 from . import models
 
 
-class TestView(View):
-    def get(self, request):
-        username = request.user.email if request.user.is_authenticated else 'Anonymous'
-        sites = models.SiteCard.objects.filter(owner=request.user.id)
-        return render(request, 'pudding/test_page.html', context={'username': username, 'sites': sites})
+def test_view(request):
+    """ Временное тестовое View, для отладки """
+    username = request.user.email if request.user.is_authenticated else 'Anonymous'
+    sites = models.SiteCard.objects.filter(card__is_deleted=False)
+    trash = range(300)
+
+    return render(
+        request,
+        'pudding/test_page.html',
+        context={'username': username, 'sites': sites, 'count': range(300)}
+    )
 
 
 class RedirectAuthorizedUserMixin:
@@ -59,39 +65,48 @@ class LogoutView(View):
 
 
 class SiteCardMixin:
-    login_url = 'login'
     form_class = forms.SiteCardForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
+        kwargs['is_deleted'] = False
         return kwargs
 
     def get_success_url(self):
-        return reverse('site-detail', kwargs={'hash': self.object.hash})
+        return reverse('site-update', kwargs={'id': self.object.card.id})
 
 
-class CreateSiteCardView(SiteCardMixin, LoginRequiredMixin, CreateView):
-    """ /site/create/  method CRUD: create """
-    template_name = 'pudding/sitecard.html'
+class UpdateSiteCardMixin(SiteCardMixin):
+    def get_object(self):
+        return get_object_or_404(
+            models.SiteCard,
+            card__owner=self.request.user,
+            card_id=self.kwargs['id'],
+            card__is_deleted=False
+        )
+
+    def get_initial(self):
+        return {
+            'username': self.object.card.username,
+            'password': self.object.card.password,
+            'notes': self.object.card.notes,
+            'is_favorite': self.object.card.is_favorite
+        }
 
 
-class DetailSiteCardView(SiteCardMixin, LoginRequiredMixin, UpdateView):
-    """ /site/<str:hash>/  method CRUD: read + update """
-    template_name = 'pudding/sitecard_detail.html'
-
-    def get_object(self, queryset=None):
-        return get_object_or_404(models.SiteCard, owner=self.request.user.id, hash=self.kwargs['hash'])
+class CreateSiteCardView(SiteCardMixin, CreateView):
+    template_name = 'pudding/sitecard/create.html'
 
 
-class DeleteSiteCardView(LoginRequiredMixin, View):
-    """ /site/<str:hash>/delete/  method CRUD: delete """
-    login_url = 'login'
+class UpdateSiteCardView(UpdateSiteCardMixin, UpdateView):
+    template_name = 'pudding/sitecard/update.html'
 
+
+class DeleteSiteCardView(View):
     def get(self, request, **kwargs):
-        self.post(request, **kwargs)
+        return HttpResponseRedirect(reverse('site-update', kwargs={'id': kwargs['id']}))
 
     def post(self, request, **kwargs):
-        obj = get_object_or_404(models.SiteCard, owner=request.user.id, hash=kwargs['hash'])
-        obj.delete()
-        return HttpResponseRedirect(reverse('dashboard'))
+        models.Card.mark_as_deleted(owner=request.user, id=kwargs['id'])
+        return HttpResponseRedirect(reverse('homepage'))

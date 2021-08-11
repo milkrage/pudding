@@ -1,0 +1,42 @@
+@import url('components/nav.css');
+@import url('components/forms.css');
+
+:root {
+    --padding: 25px;
+    --left-menu-size: 220px;
+    --form-width: 330px;
+    --bg-dark: #f6f8fa;
+    --bg-dark-select: #eceff2;
+    --btn-bg: #f6f8fa;
+    --btn-bg-select: #eceff2;
+    --btn-border-color: #858585;
+    --btn-primary: #2da44e;
+    --btn-primary-select: #2c974b;
+    --btn-danger: #cf222e;
+    --btn-danger-select: #c11f2a;
+    --error: #dc3545;
+}
+
+
+body {
+    display: flex;
+}
+
+a {
+    text-decoration: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #eaecef;
+    width: var(--left-menu-size);
+}
+
+main {
+    padding: var(--padding);
+}

@@ -1,4 +1,37 @@
 <!DOCTYPE html>
-<html>
+{% load static %}
 
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% block generic__title%}{% endblock %}</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'pudding/css/bootstrap-reboot.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'pudding/css/generic.css' %}">
+        {% block generic__head %}{% endblock %}
+    </head>
+
+    <body>
+        <header>
+            <div class="navbar">
+                <nav>
+                    <ul>
+                        <li><a class="active" href="{% url 'homepage' %}">Sites</a></li>
+                        <li><a href="/">Applications</a></li>
+                    </ul>
+                </nav>
+
+                <div class="user">
+                    <div class="username">{{ request.user }}</div>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+        {% block generic__content %}{% endblock%}
+        </main>
+    </body>
 </html>

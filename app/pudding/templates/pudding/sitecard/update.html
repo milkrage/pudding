@@ -1,0 +1,64 @@
+{% extends 'pudding/forms/sitecard.html' %}
+{% load static %}
+
+{% block card__action %}{% url 'site-update' id=object.card.id %}{% endblock %}
+{% block card__capture %}Site:{% endblock %}
+
+{% block card__delete %}
+    <form id="card__delete" class="hidden" method="post" action="{% url 'site-delete' id=object.card.id %}">
+        {% csrf_token %}
+
+        <h1>Are you sure?</h1>
+        <div class="field">
+            <div class="group-field">
+                <input id="sitecard__delete_cancel" class="full-width separate" type="button" value="Cancel">
+                <input id="sitecard__delete_confirm" class="full-width btn-danger separate" type="submit" value="Delete">
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block card__submit %}
+    <div class="field">
+        <div class="group-field">
+            <input id="sitecard__delete" class="full-width btn-danger separate" type="button" value="Delete">
+            <input id="sitecard__update" class="full-width separate" type="submit" value="Update">
+        </div>
+    </div>
+{% endblock %}
+
+{% block sitecard__js %}
+    <script>
+        document.getElementById('sitecard__delete').addEventListener('click', function(event) {
+            document.getElementById('card__form').classList.add('hidden');
+            document.getElementById('card__delete').classList.remove('hidden');
+        });
+
+        document.getElementById('sitecard__delete_cancel').addEventListener('click', function(event) {
+            document.getElementById('card__form').classList.remove('hidden');
+            document.getElementById('card__delete').classList.add('hidden');
+        });
+
+        document.addEventListener("DOMContentLoaded", function(event) {
+            capture.innerText = id_host.value;
+
+            try {
+                var url = new URL(id_uri.value);
+
+                if (url.host.startsWith('xn--')) {
+                    var user_password = (url.username || url.password) ? url.username + ':' + url.password + '@' : '';
+                    var assemble = url.protocol + '//' + user_password + punycode.toUnicode(url.hostname) + url.port + url.pathname + url.search + url.hash;
+                    uri.value = assemble;
+                }
+                else {
+                    uri.value = url.href;
+                }
+
+                uri.dispatchEvent(new Event('keyup'));
+            }
+            catch (e) {
+                console.log('error init url');
+            }
+        });
+    </script>
+{% endblock %}
