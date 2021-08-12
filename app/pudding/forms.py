@@ -68,6 +68,8 @@ class LoginForm(forms.ModelForm):
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'})
     )
 
+    next = forms.CharField(widget=forms.HiddenInput())
+
     class Meta:
         model = models.User
         fields = ('email', )
@@ -128,7 +130,6 @@ class CardForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
-        self.is_deleted = kwargs.pop('is_deleted')
         super().__init__(*args, **kwargs)
 
 
@@ -154,16 +155,17 @@ class SiteCardForm(CardForm):
                 card__is_deleted=False
             )
 
-            message = format_html('Entry already exists: <br> <a href="{href}">{id}</a>'.format(
-                href=reverse('site-update', kwargs={'id': query.card.id}),
-                id=query.card.id
-            ))
+            message = format_html(
+                'Entry already exists: <br> <a href="{href}">{id}</a>'.format(
+                    href=reverse('site-update', kwargs={'id': query.card.id}),
+                    id=query.card.id
+                )
+            )
             raise forms.ValidationError(message, code='already_exists')
 
     def clean(self):
         # form action: create
         if self.instance.pk is None:
-
             self.check_unique()
 
         return super().clean()
@@ -174,10 +176,6 @@ class SiteCardForm(CardForm):
 
         card_fields = set(self.cleaned_data.keys()) - set(self.Meta.fields)
         card_data = {field: self.cleaned_data[field] for field in card_fields}
-
-        # check mark for deletion
-        if self.is_deleted:
-            card_data['is_deleted'] = True
 
         # form action: update object
         if self.instance._state.adding is False:

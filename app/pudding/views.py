@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
@@ -16,7 +17,6 @@ def test_view(request):
     """ Временное тестовое View, для отладки """
     username = request.user.email if request.user.is_authenticated else 'Anonymous'
     sites = models.SiteCard.objects.filter(card__is_deleted=False)
-    trash = range(300)
 
     return render(
         request,
@@ -43,7 +43,6 @@ class RegistrationView(RedirectAuthorizedUserMixin, CreateView):
 class LoginView(RedirectAuthorizedUserMixin, FormView):
     template_name = 'auth/login.html'
     form_class = forms.LoginForm
-    success_url = getattr(settings, 'LOGIN_REDIRECT_URL', '/')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -53,6 +52,21 @@ class LoginView(RedirectAuthorizedUserMixin, FormView):
     def form_valid(self, form):
         login(self.request, form.user)
         return super().form_valid(form)
+
+    def get_initial(self):
+        return {'next': self.request.GET.get('next')}
+
+    def get_success_url(self):
+        default_to = getattr(settings, 'LOGIN_REDIRECT_URL', '/')
+        redirect_to = self.request.POST.get('next')
+
+        url_is_save = url_has_allowed_host_and_scheme(
+            url=redirect_to,
+            allowed_hosts=settings.ALLOWED_HOSTS,
+            require_https=settings.REQUIRE_HTTPS
+        )
+
+        return redirect_to if url_is_save else default_to
 
 
 class LogoutView(View):
@@ -65,20 +79,26 @@ class LogoutView(View):
 
 
 class SiteCardMixin:
+    login_url = '/login/'
     form_class = forms.SiteCardForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
-        kwargs['is_deleted'] = False
         return kwargs
 
     def get_success_url(self):
         return reverse('site-update', kwargs={'id': self.object.card.id})
 
 
-class UpdateSiteCardMixin(SiteCardMixin):
-    def get_object(self):
+class CreateSiteCardView(SiteCardMixin, LoginRequiredMixin, CreateView):
+    template_name = 'pudding/sitecard/create.html'
+
+
+class UpdateSiteCardView(SiteCardMixin, LoginRequiredMixin, UpdateView):
+    template_name = 'pudding/sitecard/update.html'
+
+    def get_object(self, queryset=None):
         return get_object_or_404(
             models.SiteCard,
             card__owner=self.request.user,
@@ -95,15 +115,9 @@ class UpdateSiteCardMixin(SiteCardMixin):
         }
 
 
-class CreateSiteCardView(SiteCardMixin, CreateView):
-    template_name = 'pudding/sitecard/create.html'
+class DeleteSiteCardView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
-
-class UpdateSiteCardView(UpdateSiteCardMixin, UpdateView):
-    template_name = 'pudding/sitecard/update.html'
-
-
-class DeleteSiteCardView(View):
     def get(self, request, **kwargs):
         return HttpResponseRedirect(reverse('site-update', kwargs={'id': kwargs['id']}))
 
