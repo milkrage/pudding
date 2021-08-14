@@ -68,7 +68,10 @@ class LoginForm(forms.ModelForm):
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'})
     )
 
-    next = forms.CharField(widget=forms.HiddenInput())
+    next = forms.CharField(
+        widget=forms.HiddenInput(),
+        required=False
+    )
 
     class Meta:
         model = models.User

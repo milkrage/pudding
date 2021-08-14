@@ -1,5 +1,6 @@
 @import url('components/nav.css');
 @import url('components/forms.css');
+@import url('components/list.css');
 
 :root {
     --padding: 25px;
@@ -33,10 +34,17 @@ a {
 header {
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #eaecef;
-    width: var(--left-menu-size);
+    flex: 0 0 var(--left-menu-size);
+    height: 100vh;
+    border-right: 1px solid var(--bg-dark-select);
 }
 
 main {
     padding: var(--padding);
 }
+
+    main > h1 {
+        margin-bottom: 0;
+        font-size: 1.75rem;
+        padding-bottom: var(--padding);
+    }

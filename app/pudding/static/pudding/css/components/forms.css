@@ -100,7 +100,7 @@ form .field input,
 form .field textarea {
     display: block;
     width: 100%;
-    border: 1px solid var(--btn-border-color);;
+    border: 1px solid var(--btn-border-color);
     border-radius: .25em;
     padding-left: .5rem;
     padding-right: .5rem;

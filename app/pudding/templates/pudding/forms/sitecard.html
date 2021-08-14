@@ -17,86 +17,16 @@
 
 {% block card__js %}
     <script src="{% static 'pudding/js/punycode.min.js' %}"></script>
+    <script src="{% static 'pudding/js/components/sitecard.js' %}"></script>
 
     <script>
-        function set_scheme(scheme, field_scheme, field_uri) {
-            if (field_uri.prepared.startsWith(scheme)) {
-                field_scheme.innerText = scheme;
-                field_uri.value = field_uri.value.slice(scheme.length);
-            }
+        var kwargs = {
+            cardName: 'card__name',
+            uri: 'sitecard__uri',
+            scheme: 'sitecard__scheme',
+            uri_hide: 'id_uri',
+            host: 'id_host'
         }
-
-        /* fake field */
-        const scheme = document.getElementById('sitecard__scheme');
-        const uri = document.getElementById('sitecard__uri');
-
-        /* form field */
-        const id_host = document.getElementById('id_host');
-        const id_uri = document.getElementById('id_uri');
-
-
-        document.getElementById('sitecard__uri').addEventListener('keyup', function(event) {
-            uri.prepared = uri.value.toLowerCase();
-
-            if (uri.prepared.startsWith('http://')
-                && ((scheme.innerText == '') || scheme.innerText == 'https://' || scheme.innerText == 'http://'))
-            {
-                set_scheme('http://', scheme, uri);
-            }
-
-            if (uri.prepared.startsWith('https://')
-                && ((scheme.innerText == '') || scheme.innerText == 'http://' || scheme.innerText == 'https://'))
-            {
-                set_scheme('https://', scheme, uri);
-            }
-
-            /* если SCHEME найдена, то показать поле */
-            if (scheme.innerText != '') {
-                scheme.classList.remove('hidden');
-                uri.classList.add('input-right');
-            }
-            else {
-                scheme.classList.add('hidden');
-                uri.classList.remove('input-right');
-            }
-
-
-            /* если URI валидный, записываем host в заголовок формы и в id_host */
-            var validator = document.createElement('input');
-            validator.setAttribute('type','url');
-            validator.setAttribute('maxlength', 254);
-            validator.value = scheme.innerText + uri.value;
-
-            if (validator.validity.valid) {
-                try {
-                    var url = new URL(validator.value);
-                    id_host.value = capture.innerText = (url.host.startsWith('xn--')) ? punycode.toUnicode(url.host) : url.host;
-                    id_uri.value = url.href;
-                }
-                catch (e) {
-                    capture.innerText = '_';
-                    id_host.value = '';
-                }
-            }
-            else {
-                capture.innerText = '_';
-                id_host.value = '';
-            }
-        });
-
-
-        document.getElementById('sitecard__uri').addEventListener('change', function(event) {
-            uri.prepared = uri.value.toLowerCase();
-
-            if (!(uri.prepared.startsWith('http://'))
-                && !(uri.prepared.startsWith('https://'))
-                && scheme.innerText == '')
-            {
-                uri.value = 'http://' + uri.value;
-            }
-
-            event.target.dispatchEvent(new Event('keyup'));
-        });
     </script>
 
     {% block sitecard__js %}{% endblock %}

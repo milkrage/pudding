@@ -1,9 +1,9 @@
-{% extends 'generic.html' %}
+{% extends 'pudding/layout/layout.html' %}
 {% load static %}
 
-{% block generic__content %}
+{% block generic__main %}
     <form id="card__form" method="post" action="{% block card__action %}{% endblock %}">
-        <h1>{% block card__capture %}{% endblock %} <span id="card__capture">_</span></h1>
+        <h1>{% block card__capture %}{% endblock %} <span id="card__name">_</span></h1>
 
         {% csrf_token %}
         {{ form.non_field_errors }}
@@ -50,30 +50,17 @@
 
     {% block card__delete %}{% endblock %}
 
+    <script src="{% static 'pudding/js/components/card.js' %}"></script>
     <script>
-        const capture = document.getElementById('card__capture');
-        const password = document.getElementById('id_password');
+        var kwargs = {
+            password: 'id_password',
+            btnCopyPassword: 'card__copypass',
+            checkShowPassword: 'card__showpass',
+        }
 
-
-        document.getElementById('card__copypass').addEventListener('click', function(event) {
-            var buffer = document.createElement('textarea');
-
-            buffer.setAttribute('readonly', '');
-            buffer.style.position = 'absolute';
-            buffer.style.left = '-9999px';
-            buffer.value = password.value;
-            document.body.appendChild(buffer);
-
-            buffer.select();
-            document.execCommand('copy');
-
-            buffer.remove();
-        });
-
-        document.getElementById('card__showpass').addEventListener('click', function(event) {
-            if (event.target.checked) { password.type = 'text'; }
-            else { password.type = 'password'; }
-        });
+        var cardApp = Card(kwargs);
+        cardApp.events();
     </script>
+
     {% block card__js %}{% endblock %}
 {% endblock %}

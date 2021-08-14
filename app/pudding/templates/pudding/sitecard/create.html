@@ -9,3 +9,10 @@
         <input id="sitecard__create" class="full-width" type="submit" value="Submit">
     </div>
 {% endblock %}
+
+{% block sitecard__js %}
+    <script>
+        var SiteCardApp = SiteCard(kwargs);
+        SiteCardApp.events();
+    </script>
+{% endblock %}

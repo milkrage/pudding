@@ -1,0 +1,35 @@
+{% extends 'pudding/layout/layout.html' %}
+{% load static %}
+{% load jsonify %}
+
+{% block generic__main %}
+    <h1>List of Sites</h1>
+
+    <div class="list__filter">
+        <input id="filter" type="text" placeholder="Filter">
+    </div>
+
+    <div class="list__control">
+        <a href="/site/create/"><img src="{% static 'pudding/img/add.svg' %}">Add item</a>
+    </div>
+
+    <div id="list__items">
+    </div>
+
+    <script src="{% static 'pudding/js/components/list.js' %}"></script>
+
+    <script>
+        var data = {{ data | json_dumps }}
+
+        var kwargs = {
+            'model': data,
+            'container': 'list__items',
+            'query': 'filter'
+        };
+
+        var listApp = List(kwargs);
+        listApp.events();
+        listApp.render();
+
+    </script>
+{% endblock %}

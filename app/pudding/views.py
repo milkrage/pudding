@@ -18,10 +18,19 @@ def test_view(request):
     username = request.user.email if request.user.is_authenticated else 'Anonymous'
     sites = models.SiteCard.objects.filter(card__is_deleted=False)
 
+    data = {}
+    for site in sites:
+        data[str(site.card.pk)] = {
+            'link': reverse('site-update', kwargs={'id': site.card.pk}),
+            'char': site.host[0].upper(),
+            'title': site.host,
+            'username': site.card.username
+        }
+
     return render(
         request,
-        'pudding/test_page.html',
-        context={'username': username, 'sites': sites, 'count': range(300)}
+        'pudding/forms/list.html',
+        context={'username': username, 'data': data, 'count': range(300)}
     )
 
 
