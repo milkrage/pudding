@@ -1,0 +1,43 @@
+{% extends 'pudding/forms/sitecard.html' %}
+{% load static %}
+
+{% block card__action %}{% url 'site-update' id=object.card.id %}{% endblock %}
+{% block card__capture %}Site:{% endblock %}
+
+{% block card__delete %}
+    <form id="card__delete" class="hidden" method="post" action="{% url 'site-delete' id=object.card.id %}">
+        {% csrf_token %}
+
+        <h1>Are you sure?</h1>
+        <div class="field">
+            <div class="group-field">
+                <input id="sitecard__delete_cancel" class="full-width separate" type="button" value="Cancel">
+                <input class="full-width btn-danger separate" type="submit" value="Delete">
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block card__submit %}
+    <div class="field">
+        <div class="group-field">
+            <input id="sitecard__delete" class="full-width btn-danger separate" type="button" value="Delete">
+            <input class="full-width separate" type="submit" value="Update">
+        </div>
+    </div>
+{% endblock %}
+
+{% block sitecard__js %}
+    <script>
+        var SiteCardApp = SiteCard(kwargs);
+        SiteCardApp.events();
+        SiteCardApp.page.update();
+
+        cardApp.eventsUpdatePage({
+            btnDelete: 'sitecard__delete',
+            btnCancel: 'sitecard__delete_cancel',
+            formCard: 'card__form',
+            formDelete: 'card__delete',
+        });
+    </script>
+{% endblock %}

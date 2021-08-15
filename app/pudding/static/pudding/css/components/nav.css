@@ -1,0 +1,34 @@
+.navbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    width: calc(var(--left-menu-size) - 1px);
+    background: var(--bg-dark);
+}
+
+    .navbar nav ul {
+        margin: 0;
+        padding: 0;
+        padding-top: var(--padding);
+        list-style: none;
+    }
+
+        .navbar nav a {
+            display: block;
+            padding: 5px var(--padding);
+        }
+
+            .navbar nav a.active {
+                font-weight: bolder;
+            }
+
+            .navbar nav li:first-child a {
+                padding-top: 0;
+            }
+
+    .navbar .user {
+        padding: var(--padding);
+        background-color: #eceff2;
+    }

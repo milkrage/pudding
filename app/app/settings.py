@@ -27,8 +27,10 @@ SECRET_KEY = environment.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = environment.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = environment.ALLOWED_HOSTS
 
+# For djagno.urils.http.url_has_allowed_host_and_scheme
+REQUIRE_HTTPS = environment.REQUIRE_HTTPS
 
 # Application definition
 # disable: 'django.contrib.admin'

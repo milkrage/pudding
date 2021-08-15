@@ -1,0 +1,33 @@
+{% extends 'pudding/forms/card.html' %}
+{% load static %}
+
+{% block card__before_username %}
+    {{ form.host }}
+    {{ form.uri }}
+
+    <div class="field">
+        <label for="sitecard__uri">URI:</label>
+        <div class="group-field">
+            <div id="sitecard__scheme" class="input-icon icon-left no-select hidden"></div>
+            <input id="sitecard__uri" type="text" maxlength="254" required>
+        </div>
+        {{ form.uri.errors }}
+    </div>
+{% endblock %}
+
+{% block card__js %}
+    <script src="{% static 'pudding/js/punycode.min.js' %}"></script>
+    <script src="{% static 'pudding/js/components/sitecard.js' %}"></script>
+
+    <script>
+        var kwargs = {
+            cardName: 'card__name',
+            uri: 'sitecard__uri',
+            scheme: 'sitecard__scheme',
+            uri_hide: 'id_uri',
+            host: 'id_host'
+        }
+    </script>
+
+    {% block sitecard__js %}{% endblock %}
+{% endblock %}

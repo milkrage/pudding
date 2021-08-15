@@ -1,0 +1,50 @@
+@import url('components/nav.css');
+@import url('components/forms.css');
+@import url('components/list.css');
+
+:root {
+    --padding: 25px;
+    --left-menu-size: 220px;
+    --form-width: 330px;
+    --bg-dark: #f6f8fa;
+    --bg-dark-select: #eceff2;
+    --btn-bg: #f6f8fa;
+    --btn-bg-select: #eceff2;
+    --btn-border-color: #858585;
+    --btn-primary: #2da44e;
+    --btn-primary-select: #2c974b;
+    --btn-danger: #cf222e;
+    --btn-danger-select: #c11f2a;
+    --error: #dc3545;
+}
+
+
+body {
+    display: flex;
+}
+
+a {
+    text-decoration: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 var(--left-menu-size);
+    height: 100vh;
+    border-right: 1px solid var(--bg-dark-select);
+}
+
+main {
+    padding: var(--padding);
+}
+
+    main > h1 {
+        margin-bottom: 0;
+        font-size: 1.75rem;
+        padding-bottom: var(--padding);
+    }

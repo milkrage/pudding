@@ -1,0 +1,57 @@
+.list__filter {
+    margin-bottom: var(--padding);
+}
+
+    .list__filter input {
+        display: block;
+        width: var(--form-width);
+        border: 1px solid var(--btn-border-color);
+        border-radius: .25em;
+        padding-left: .5rem;
+        padding-right: .5rem;
+    }
+
+.list__control {
+    display: flex;
+    margin-bottom: var(--padding);
+}
+
+    .list__control a {
+        display: flex;
+        flex: 0 0 115px;
+        line-height: 31px;
+        font-weight: 500;
+    }
+
+        .list__control a img {
+            width: 31px;
+            height: 31px;
+            margin-right: 15.5px;
+        }
+
+.list__item {
+    display: flex;
+    margin-bottom: var(--padding);
+}
+
+    .list__char {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 54px;
+        height: 54px;
+        margin-right: var(--padding);
+        border: 1px solid var(--bg-dark-select);
+        font-size: 1.438rem;
+        font-weight: 500;
+    }
+
+    .list__wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .list__title {
+            font-size: 1.250rem;
+            font-weight: 500;
+        }

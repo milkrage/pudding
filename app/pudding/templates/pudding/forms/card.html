@@ -1,0 +1,66 @@
+{% extends 'pudding/layout/layout.html' %}
+{% load static %}
+
+{% block generic__main %}
+    <form id="card__form" method="post" action="{% block card__action %}{% endblock %}">
+        <h1>{% block card__capture %}{% endblock %} <span id="card__name">_</span></h1>
+
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% block card__before_username %}{% endblock %}
+
+        <div class="field">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div class="field">
+            {{ form.password.label_tag }}
+            <div class="group-field">
+                {{ form.password }}
+                <div id="card__copypass" class="input-icon icon-animate icon-right no-select">
+                    <img src="{% static 'pudding/img/copy.svg' %}" alt="copy password">
+                </div>
+            </div>
+             {{ form.password.errors }}
+            <div class="help-text">
+                <input type="checkbox" id="card__showpass">
+                <label for="card__showpass">Show password</label>
+            </div>
+        </div>
+
+        <div class="field">
+            {{ form.notes.label_tag }}
+            {{ form.notes }}
+            {{ form.notes.errors }}
+        </div>
+
+        <div class="field">
+            {{ form.is_favorite }}
+            {{ form.is_favorite.label_tag }}
+            {{ form.is_favorite.errors }}
+        </div>
+
+        {% block card__after_favorite %}{% endblock %}
+
+        {% block card__submit %}{% endblock %}
+    </form>
+
+    {% block card__delete %}{% endblock %}
+
+    <script src="{% static 'pudding/js/components/card.js' %}"></script>
+    <script>
+        var kwargs = {
+            password: 'id_password',
+            btnCopyPassword: 'card__copypass',
+            checkShowPassword: 'card__showpass',
+        }
+
+        var cardApp = Card(kwargs);
+        cardApp.events();
+    </script>
+
+    {% block card__js %}{% endblock %}
+{% endblock %}

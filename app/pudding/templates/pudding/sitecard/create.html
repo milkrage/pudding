@@ -1,0 +1,18 @@
+{% extends 'pudding/forms/sitecard.html' %}
+{% load static %}
+
+{% block card__action %}{% url 'site-create' %}{% endblock %}
+{% block card__capture %}Create:{% endblock %}
+
+{% block card__submit %}
+    <div class="field">
+        <input id="sitecard__create" class="full-width" type="submit" value="Submit">
+    </div>
+{% endblock %}
+
+{% block sitecard__js %}
+    <script>
+        var SiteCardApp = SiteCard(kwargs);
+        SiteCardApp.events();
+    </script>
+{% endblock %}
