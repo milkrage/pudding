@@ -12,7 +12,9 @@
 
 {% block sitecard__js %}
     <script>
-        var SiteCardApp = SiteCard(kwargs);
-        SiteCardApp.events();
+        document.addEventListener('DOMContentLoaded', function(event) {
+            sitecard = new Site();
+            sitecard.events();
+        });
     </script>
 {% endblock %}

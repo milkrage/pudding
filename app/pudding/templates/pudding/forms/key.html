@@ -1,0 +1,32 @@
+{% extends 'pudding/layout/generic.html' %}
+{% load static %}
+
+{% block generic__main %}
+    <main class="center">
+        <form name="form_masterkey" method="POST" action="{% url 'key' %}">
+            {% csrf_token %}
+            {{ form.cipher }}
+            {{ form.next }}
+
+            <div class="field" id="field_masterkey"></div>
+
+            <div class="field">
+                <input class="full-width" type="submit" value="Save">
+            </div>
+        </form>
+    </main>
+{% endblock %}
+
+{% block generic__script %}
+    <script src="{% static 'pudding/js/crypto-js.min.js'%}"></script>
+    <script src="{% static 'pudding/js/modules/pudding.js'%}"></script>
+    <script src="{% static 'pudding/js/modules/key.js'%}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function(event) {
+            app = new Key('form_masterkey', 'field_masterkey');
+            app.render();
+            app.events();
+        });
+    </script>
+{% endblock %}

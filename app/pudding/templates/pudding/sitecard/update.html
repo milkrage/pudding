@@ -11,7 +11,7 @@
         <h1>Are you sure?</h1>
         <div class="field">
             <div class="group-field">
-                <input id="sitecard__delete_cancel" class="full-width separate" type="button" value="Cancel">
+                <input id="card__delete_cancel" class="full-width separate" type="button" value="Cancel">
                 <input class="full-width btn-danger separate" type="submit" value="Delete">
             </div>
         </div>
@@ -21,7 +21,7 @@
 {% block card__submit %}
     <div class="field">
         <div class="group-field">
-            <input id="sitecard__delete" class="full-width btn-danger separate" type="button" value="Delete">
+            <input id="card__delete_active" class="full-width btn-danger separate" type="button" value="Delete">
             <input class="full-width separate" type="submit" value="Update">
         </div>
     </div>
@@ -29,15 +29,10 @@
 
 {% block sitecard__js %}
     <script>
-        var SiteCardApp = SiteCard(kwargs);
-        SiteCardApp.events();
-        SiteCardApp.page.update();
-
-        cardApp.eventsUpdatePage({
-            btnDelete: 'sitecard__delete',
-            btnCancel: 'sitecard__delete_cancel',
-            formCard: 'card__form',
-            formDelete: 'card__delete',
+        document.addEventListener('DOMContentLoaded', function(event) {
+            sitecard = new Site();
+            sitecard.render();
+            sitecard.events('update');
         });
     </script>
 {% endblock %}

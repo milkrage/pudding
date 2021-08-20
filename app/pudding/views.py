@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import View, CreateView, FormView, UpdateView
+from django.views.generic import View, CreateView, FormView, UpdateView, TemplateView
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
@@ -13,25 +13,29 @@ from . import forms
 from . import models
 
 
-def test_view(request):
-    """ Временное тестовое View, для отладки """
-    username = request.user.email if request.user.is_authenticated else 'Anonymous'
-    sites = models.SiteCard.objects.filter(card__is_deleted=False)
+class ListView(LoginRequiredMixin, TemplateView):
+    template_name = 'pudding/forms/list.html';
+    login_url = '/login/'
 
-    data = {}
-    for site in sites:
-        data[str(site.card.pk)] = {
-            'link': reverse('site-update', kwargs={'id': site.card.pk}),
-            'char': site.host[0].upper(),
-            'title': site.host,
-            'username': site.card.username
-        }
+    def list_serializer(self, queryset):
+        data = {}
+        for site in queryset:
+            data[str(site.card.pk)] = {
+                'link': reverse('site-update', kwargs={'id': site.card.pk}),
+                'title': site.host,
+                'username': site.card.username
+            }
+        return data
 
-    return render(
-        request,
-        'pudding/forms/list.html',
-        context={'username': username, 'data': data, 'count': range(300)}
-    )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['data'] = self.list_serializer(
+            models.SiteCard.objects.filter(
+                card__owner=self.request.user,
+                card__is_deleted=False
+            )
+        )
+        return context
 
 
 class RedirectAuthorizedUserMixin:
@@ -75,7 +79,8 @@ class LoginView(RedirectAuthorizedUserMixin, FormView):
             require_https=settings.REQUIRE_HTTPS
         )
 
-        return redirect_to if url_is_save else default_to
+        ref = redirect_to if url_is_save else default_to
+        return reverse('key') + '?next=' + ref
 
 
 class LogoutView(View):
@@ -85,6 +90,30 @@ class LogoutView(View):
         return HttpResponseRedirect(
             getattr(settings, 'LOGOUT_REDIRECT_URL', '/')
         )
+
+
+class KeyView(UpdateView):
+    template_name = 'pudding/forms/key.html'
+    form_class = forms.KeyForm
+    success_url = '/'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_initial(self):
+        return {'next': self.request.GET.get('next')}
+
+    def get_success_url(self):
+        default_to = getattr(settings, 'LOGIN_REDIRECT_URL', '/')
+        redirect_to = self.request.POST.get('next')
+
+        url_is_save = url_has_allowed_host_and_scheme(
+            url=redirect_to,
+            allowed_hosts=settings.ALLOWED_HOSTS,
+            require_https=settings.REQUIRE_HTTPS
+        )
+
+        return redirect_to if url_is_save else default_to
 
 
 class SiteCardMixin:

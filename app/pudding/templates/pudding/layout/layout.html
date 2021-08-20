@@ -2,18 +2,25 @@
 {% load static %}
 
 {% block generic__header %}
-    <div class="navbar">
-        <nav>
-            <ul>
-                <li><a class="active" href="{% url 'homepage' %}">Sites</a></li>
-                <li><a href="/">Applications</a></li>
-            </ul>
-        </nav>
+    <header>
+        <div class="navbar">
+            <nav>
+                <ul>
+                    <li><a class="active" href="{% url 'homepage' %}">Sites</a></li>
+                </ul>
+            </nav>
 
-        <div class="user">
-            <div class="username">{{ request.user }}</div>
-            <a href="{% url 'logout' %}">Logout</a>
+            <div class="user">
+                <div class="username">{{ request.user }}</div>
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
         </div>
-    </div>
+    </header>
 {% endblock%}
+
+{% block generic__main %}
+    <main>
+        {% block layout__main %}{% endblock %}
+    </main>
+{% endblock %}
 

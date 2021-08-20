@@ -14,12 +14,8 @@
     </head>
 
     <body>
-        <header>
-           {% block generic__header %}{% endblock%}
-        </header>
-
-        <main>
-            {% block generic__main %}{% endblock%}
-        </main>
+        {% block generic__header %}{% endblock %}
+        {% block generic__main %}{% endblock %}
+        {% block generic__script %}{% endblock %}
     </body>
 </html>

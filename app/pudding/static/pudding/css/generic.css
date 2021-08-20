@@ -48,3 +48,19 @@ main {
         font-size: 1.75rem;
         padding-bottom: var(--padding);
     }
+
+    main.center {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding-top: 150px;
+    }
+
+        main.center form {
+            width: 250px;
+        }
+
+#burger {
+    margin-bottom: var(--padding);
+    font-size: 1.45rem;
+}
