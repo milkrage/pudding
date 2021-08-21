@@ -1,5 +1,42 @@
-<form method="post" action="/registration/">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="submit">
-</form>
+{% extends 'pudding/layout/generic.html' %}
+{% load static %}
+
+{% block generic__head %}
+    <style>
+        form h1 {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block generic__main %}
+    <main class="center">
+        <form method="POST" action="{% url 'registration' %}">
+            <h1>Sign up</h1>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="field">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+
+            <div class="field">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+
+            <div class="field">
+                <input class="full-width" type="submit" value="Submit">
+            </div>
+        </form>
+    </main>
+{% endblock %}
