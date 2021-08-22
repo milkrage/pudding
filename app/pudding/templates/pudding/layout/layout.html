@@ -2,18 +2,31 @@
 {% load static %}
 
 {% block generic__header %}
-    <div class="navbar">
-        <nav>
-            <ul>
-                <li><a class="active" href="{% url 'homepage' %}">Sites</a></li>
-                <li><a href="/">Applications</a></li>
-            </ul>
-        </nav>
+    <header id="_header">
+        <div class="navbar">
+            <nav>
+                <div class="menu-btn menu-btn-close">
+                    <a id="menu-close"><img src="{% static 'pudding/img/menu.svg'%}"></a>
+                </div>
+                <ul>
+                    <li><a class="active" href="{% url 'homepage' %}">Sites</a></li>
+                </ul>
+            </nav>
 
-        <div class="user">
-            <div class="username">{{ request.user }}</div>
-            <a href="{% url 'logout' %}">Logout</a>
+            <div class="user">
+                <div class="username">{{ request.user }}</div>
+                <a href="" id="logout">Logout</a>
+            </div>
         </div>
-    </div>
+    </header>
 {% endblock%}
+
+{% block generic__main %}
+    <main id="_main">
+        <div class="menu-btn">
+            <a id="menu-show"><img src="{% static 'pudding/img/menu_dark.svg'%}"></a>
+        </div>
+        {% block layout__main %}{% endblock %}
+    </main>
+{% endblock %}
 

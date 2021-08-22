@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
         <title>{% block generic__title%}{% endblock %}</title>
 
@@ -14,12 +14,8 @@
     </head>
 
     <body>
-        <header>
-           {% block generic__header %}{% endblock%}
-        </header>
-
-        <main>
-            {% block generic__main %}{% endblock%}
-        </main>
+        {% block generic__header %}{% endblock %}
+        {% block generic__main %}{% endblock %}
+        {% block generic__script %}{% endblock %}
     </body>
 </html>

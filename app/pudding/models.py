@@ -47,6 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     is_active = models.BooleanField(_('active'), default=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    cipher = models.CharField(_('cipher'), max_length=44, blank=True)
 
     objects = UserManager()
 

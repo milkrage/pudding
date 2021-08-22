@@ -48,3 +48,66 @@ main {
         font-size: 1.75rem;
         padding-bottom: var(--padding);
     }
+
+    main.center {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding-top: 150px;
+    }
+
+        main.center form {
+            width: 250px;
+        }
+
+.menu-btn {
+    display: none;
+    margin-bottom: var(--padding);
+}
+
+    .menu-btn a {
+        display: inline-block !important;
+        padding: 0 !important;
+        line-height: 26px;
+        user-select: none;
+    }
+
+        .menu-btn img {
+            width: 26px;
+            height: 26px;
+            vertical-align: top;
+        }
+
+.menu-btn-close {
+    margin-bottom: 0;
+    padding-top: var(--padding);
+    padding-left: var(--padding);
+}
+
+
+@media screen and (max-width: 900px) {
+
+    :root {
+        --form-width: 100%;
+    }
+
+	header{
+	    display: none;
+	}
+
+    main {
+        width: 100%;
+        max-width: 450px;
+    }
+
+        #filter {
+            max-width: 350px;
+        }
+
+	.menu-btn {
+	    display: block;
+	}
+
+}

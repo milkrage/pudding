@@ -103,6 +103,15 @@ class LoginForm(forms.ModelForm):
         return self.cleaned_data
 
 
+class KeyForm(forms.ModelForm):
+    cipher = forms.CharField(max_length=44, widget=forms.HiddenInput)
+    next = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    class Meta:
+        model = models.User
+        fields = ('cipher', )
+
+
 class CardForm(forms.ModelForm):
     username = forms.CharField(
         label=_('Username'),
@@ -169,7 +178,9 @@ class SiteCardForm(CardForm):
     def clean(self):
         # form action: create
         if self.instance.pk is None:
-            self.check_unique()
+            # не будет срабатывать, т.к. результат AES, всегда будет новый
+            # self.check_unique()
+            pass
 
         return super().clean()
 

@@ -2,7 +2,7 @@
 {% load static %}
 {% load jsonify %}
 
-{% block generic__main %}
+{% block layout__main %}
     <h1>List of Sites</h1>
 
     <div class="list__filter">
@@ -16,20 +16,18 @@
     <div id="list__items">
     </div>
 
-    <script src="{% static 'pudding/js/components/list.js' %}"></script>
+    <script src="{% static 'pudding/js/crypto-js.min.js' %}"></script>
+    <script src="{% static 'pudding/js/modules/pudding.js' %}"></script>
+    <script src="{% static 'pudding/js/modules/list.js' %}"></script>
 
     <script>
         var data = {{ data | json_dumps }}
 
-        var kwargs = {
-            'model': data,
-            'container': 'list__items',
-            'query': 'filter'
-        };
-
-        var listApp = List(kwargs);
-        listApp.events();
-        listApp.render();
+        document.addEventListener('DOMContentLoaded', function(event) {
+            app = new List(data, 'list__items', 'filter');
+            app.render();
+            app.events();
+        });
 
     </script>
 {% endblock %}
