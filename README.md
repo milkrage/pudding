@@ -4,7 +4,7 @@ It's a password manager with AES on the client side
 ## Install
 
 ### Install venv
-1. `python -m venc pudding`
+1. `python -m venv pudding`
 2. `cd pudding`
 3. for Windows: `Scripts\activate.bat`
 
