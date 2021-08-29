@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from .. import forms
 
 
-class RegistrationForm(TestCase):
+class RegistrationFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         activate('en-us')
@@ -104,7 +104,7 @@ class RegistrationForm(TestCase):
         self.assertEqual(existence, True)
 
 
-class LoginForm(TestCase):
+class LoginFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         activate('en-us')
