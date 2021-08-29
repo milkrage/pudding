@@ -1,5 +1,6 @@
 # Pudding
-It's a password manager with AES on the client side
+It's a password manager with AES on the client side.<br>
+Demo stand: https://pudding.milkrage.ru
 
 ## Install
 
