@@ -43,7 +43,10 @@ class RedirectAuthorizedUserMixin:
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return HttpResponseRedirect(self.success_url)
+            if self.success_url is None:
+                return HttpResponseRedirect(self.get_success_url())
+            else:
+                return HttpResponseRedirect(self.success_url)
         return super().dispatch(request, *args, **kwargs)
 
 
