@@ -15,7 +15,6 @@ from . import environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROJECT_DIR = Path(BASE_DIR).parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -56,6 +55,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'app.urls'
+LOGIN_REDIRECT_URL = environment.LOGIN_REDIRECT_URL
+LOGOUT_REDIRECT_URL = environment.LOGOUT_REDIRECT_URL
+
 
 TEMPLATES = [
     {
@@ -79,12 +81,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': PROJECT_DIR / 'db.sqlite3',
-    }
-}
+DATABASES = environment.DATABASES
 
 
 # Password validation
@@ -108,9 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Custom User Model: https://docs.djangoproject.com/en/3.2/topics/auth/customizing/#substituting-a-custom-user-model
 AUTH_USER_MODEL = 'pudding.User'
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -130,11 +124,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = environment.STATIC_ROOT
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# API Settings
-API_ENABLE = True
+
+# Pudding Settings
+API_ENABLE = environment.API_ENABLE
