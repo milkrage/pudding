@@ -132,5 +132,6 @@ STATIC_ROOT = environment.STATIC_ROOT
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Pudding Settings
+# API Settings
 API_ENABLE = environment.API_ENABLE
+REST_FRAMEWORK = environment.REST_FRAMEWORK
