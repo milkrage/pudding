@@ -14,7 +14,7 @@ from . import models
 
 
 class ListView(LoginRequiredMixin, TemplateView):
-    template_name = 'pudding/forms/list.html';
+    template_name = 'pudding/sitecard/list.html'
     login_url = '/login/'
 
     def list_serializer(self, queryset):

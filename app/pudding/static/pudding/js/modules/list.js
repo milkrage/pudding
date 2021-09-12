@@ -69,3 +69,22 @@ class List extends Pudding {
 		this.query.addEventListener('input', this.filter.bind(this));
 	}
 }
+
+
+class SiteList extends List {
+
+    constructor(model, container, query) {
+        super(model, container, query);
+    }
+
+    prepareQuery(query) {
+        query = query.toLowerCase();
+        query = query.startsWith('http://') ? query.slice(7) : query;
+        query = query.startsWith('https://') ? query.slice(8) : query;
+        query = query.startsWith('www.') ? query.slice(4) : query;
+        query = query.split('/', 1)[0];
+
+        return query;
+    }
+
+}

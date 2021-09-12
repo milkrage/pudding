@@ -1,0 +1,11 @@
+{% extends 'pudding/forms/list.html' %}
+
+{% block list_js %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function(event) {
+            app = new SiteList(data, 'list__items', 'filter');
+            app.render();
+            app.events();
+        });
+    </script>
+{% endblock %}
